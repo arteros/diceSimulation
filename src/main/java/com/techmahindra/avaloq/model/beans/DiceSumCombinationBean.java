@@ -5,6 +5,7 @@ public class DiceSumCombinationBean {
 	private int combinationSum;
 	private int repeatCount;
 	private Double repeatPercentage;
+	private String repeatPercentageString;
 	
 	public int getCombinationSum() {
 		return combinationSum;
@@ -21,8 +22,15 @@ public class DiceSumCombinationBean {
 	public double getRepeatPercentage() {
 		return repeatPercentage;
 	}
-	public void setRepeatPercentage(double repeatPercentage) {
+	public String getRepeatPercentageString() {
+		return repeatPercentageString;
+	}
+	public void setRepeatPercentageString(String repeatPercentageString) {
+		this.repeatPercentageString = repeatPercentageString;
+	}
+	public void setRepeatPercentage(Double repeatPercentage) {
 		this.repeatPercentage = repeatPercentage;
+		setRepeatPercentageString(repeatPercentage+"%");
 	}
 	
 	
