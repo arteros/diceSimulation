@@ -12,12 +12,12 @@ import com.google.gson.GsonBuilder;
 import com.techmahindra.avaloq.model.beans.DiceBean;
 import com.techmahindra.avaloq.model.beans.DiceGameBean;
 import com.techmahindra.avaloq.model.forms.DiceForm;
-import com.techmahindra.avaloq.service.DiceSimulationService;
-import com.techmahindra.avaloq.service.impl.DiceSimulationServiceImpl;
+import com.techmahindra.avaloq.service.DiceService;
+import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
 
 @Controller
 public class DiceController {
-	DiceSimulationService service = new DiceSimulationServiceImpl();
+	DiceService service = new DiceServiceImpl();
 
 	@RequestMapping(value = "/generateDiceRollSimulations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> generateDiceRollSimulations(int diceCount, int sideCount, int rollCount) {

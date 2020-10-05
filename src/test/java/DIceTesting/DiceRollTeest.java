@@ -17,8 +17,8 @@ import com.techmahindra.avaloq.model.entity.DiceEntity;
 import com.techmahindra.avaloq.model.entity.DiceGame;
 import com.techmahindra.avaloq.model.entity.DiceGameSmulation;
 import com.techmahindra.avaloq.model.forms.DiceForm;
-import com.techmahindra.avaloq.service.DiceSimulationService;
-import com.techmahindra.avaloq.service.impl.DiceSimulationServiceImpl;
+import com.techmahindra.avaloq.service.DiceService;
+import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
 
 public class DiceRollTeest {
 
@@ -63,7 +63,7 @@ public class DiceRollTeest {
 	
 //	@Test
 	public void diceGameSimulationServiceTest() {
-		DiceSimulationService service = new DiceSimulationServiceImpl();
+		DiceService service = new DiceServiceImpl();
 		
 		
 		int maxCount = 6;
@@ -88,7 +88,7 @@ public class DiceRollTeest {
 
 	@Test
 	public void retrieveDiceGameSimulationResultsTest() {
-		DiceSimulationService service = new DiceSimulationServiceImpl();
+		DiceService service = new DiceServiceImpl();
 		
 		DiceGameBean dgbean = service.retrieveDiceSimulation(new DiceForm());
 
