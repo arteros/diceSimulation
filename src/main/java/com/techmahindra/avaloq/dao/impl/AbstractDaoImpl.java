@@ -26,6 +26,16 @@ public abstract class AbstractDaoImpl<E> {
         }
 
         Criteria criteria = sessionObj.createCriteria(entity);
+        if (container.getSearchString_1()!=null && !container.getSearchString_1().equals("")) {
+    		criteria.add(Restrictions.eq(container.getSearchParameter_1(),container.getSearchString_1() ));
+        }else if (container.getSearchInt_1()!=null && !container.getSearchInt_1().equals("")) {
+    		criteria.add(Restrictions.eq(container.getSearchParameter_1(),container.getSearchInt_1() ));
+        }
+        if (container.getSearchInt_2()!=null && !container.getSearchInt_2().equals("")) {
+    		criteria.add(Restrictions.eq(container.getSearchParameter_2(),container.getSearchInt_2() ));
+        }else if (container.getSearchString_2()!=null && !container.getSearchString_2().equals("")) {
+    		criteria.add(Restrictions.eq(container.getSearchParameter_2(),container.getSearchString_2() ));
+        }
 
         List<E> list = new ArrayList<E>();
         for(Object p:criteria.list()){

@@ -21,8 +21,8 @@ public class DiceGameSmulation {
 	public int getKey() {
 		return key;
 	}
-	public void setKey(int key) {
-		this.simulationMap.put(key, 1);
+	public void setKey(int key, int value) {
+		this.simulationMap.put(key, value);
 	}
 	public int getValue(int value) {
 		return value;
@@ -30,10 +30,19 @@ public class DiceGameSmulation {
 	public void setValue(int value) {
 		Integer existingValue = this.simulationMap.get(value);
 		if (existingValue==null) {
-			setKey(value);
+			setKey(value, 1);
 		}else {
 			existingValue = existingValue+1;
 			this.simulationMap.replace(value, existingValue);
+		}
+	}
+	public void setKeyValue(int key, int value) {
+		Integer existingValue = this.simulationMap.get(key);
+		if (existingValue==null) {
+			setKey(key, value);
+		}else {
+			existingValue = existingValue+value;
+			this.simulationMap.replace(key, existingValue);
 		}
 	}
 	

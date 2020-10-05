@@ -27,6 +27,9 @@ public class Dice {
 	@Column(name = "side_count")
 	private int sideCount;
 	
+	@Column(name = "total_roll_count")
+	private int totalRollCount;
+	
 	@OneToMany(mappedBy = "dice")
 	private List<DiceSimulation> diceSimulation = new ArrayList<DiceSimulation>();
 
@@ -60,6 +63,14 @@ public class Dice {
 
 	public void setDiceSimulation(List<DiceSimulation> diceSimulation) {
 		this.diceSimulation = diceSimulation;
+	}
+
+	public int getTotalRollCount() {
+		return totalRollCount;
+	}
+
+	public void setTotalRollCount(int totalRollCount) {
+		this.totalRollCount = totalRollCount;
 	}
 	
 	

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.techmahindra.avaloq.model.beans.DiceBean;
+import com.techmahindra.avaloq.model.beans.DiceGameBean;
 import com.techmahindra.avaloq.model.forms.DiceForm;
 import com.techmahindra.avaloq.service.DiceSimulationService;
 import com.techmahindra.avaloq.service.impl.DiceSimulationServiceImpl;
@@ -18,34 +19,43 @@ import com.techmahindra.avaloq.service.impl.DiceSimulationServiceImpl;
 public class DiceController {
 	DiceSimulationService service = new DiceSimulationServiceImpl();
 
-	@RequestMapping(value = "/generateDiceRollSimulations", method = RequestMethod.GET,
-    produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> retrieveList(int diceCount, int sideCount, int rollCount) {
+	@RequestMapping(value = "/generateDiceRollSimulations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> generateDiceRollSimulations(int diceCount, int sideCount, int rollCount) {
 		System.out.println("hello world welcome:");
 
 		DiceForm form = new DiceForm();
 		form.setDiceCount(diceCount);
 		form.setRollCount(rollCount);
-		String reponse = validateQueryParameter( diceCount,  sideCount,  rollCount);
+		String response = validateQueryParameter(diceCount, sideCount, rollCount);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		if(reponse.equals("")) {
+		if (response.equals("")) {
 			form.setSize(sideCount);
-			DiceBean bean = service.retreiveDiceSimulation(form);
-			reponse= gson.toJson(bean);
-			System.out.print(reponse);
-		}else {
-			reponse= gson.toJson(reponse);
+			DiceBean bean = service.processDiceSimulation(form);
+			response = gson.toJson(bean);
+			System.out.print(response);
+		} else {
+			response = gson.toJson(response);
 		}
-		return new ResponseEntity<Object>(reponse, HttpStatus.OK);
+		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(value = "/retrieveDiceRollSimulations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> retrieveDiceRollSimulations() {
+		System.out.println("hello world welcome:");
+
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		DiceGameBean bean = service.retrieveDiceSimulation(new DiceForm());
+		String response = gson.toJson(bean);
+		return new ResponseEntity<Object>(response, HttpStatus.OK);
+	}
+
 	private String validateQueryParameter(int diceCount, int sideCount, int rollCount) {
 		String resposnse = "";
-		if (diceCount<1) {
+		if (diceCount < 1) {
 			resposnse = "Dice Count should be greater than 0";
-		}else if (rollCount<1) {
+		} else if (rollCount < 1) {
 			resposnse = "Roll Count should be greater than 0";
-		}else if (sideCount<4) {
+		} else if (sideCount < 4) {
 			resposnse = "Sides of Dice should be greater than 3";
 		}
 		return resposnse;
