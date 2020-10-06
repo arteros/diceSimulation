@@ -21,6 +21,9 @@ public abstract class AbstractDaoImpl<E> {
 	@SuppressWarnings("unchecked")
 	public List<E> retrieveList(SearchContainerHelper container) {
 	    Session sessionObj= HibernateUtil.retriveSession();
+	    if (sessionObj==null) {
+	    	sessionObj=HibernateUtil.getSessionFactory().openSession();
+	    }
         if (!sessionObj.getTransaction().isActive()) {
         	sessionObj.beginTransaction() ;
         }
@@ -75,6 +78,10 @@ public abstract class AbstractDaoImpl<E> {
 	public E saveObjectwithReturn(E details) {
 	    Session sessionObj= HibernateUtil.retriveSession();
 		// TODO Auto-generated method stub
+
+	    if (sessionObj==null) {
+	    	sessionObj=HibernateUtil.getSessionFactory().openSession();
+	    }
         if (!sessionObj.getTransaction().isActive()) {
         	sessionObj.beginTransaction() ;
         }

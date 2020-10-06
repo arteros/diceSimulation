@@ -29,31 +29,24 @@ import com.techmahindra.avaloq.util.SearchContainerUtil;
 
 @Service 
 public class DiceServiceImpl implements DiceService {
-
-	public DiceServiceImpl() {
+	private DiceDao dao;
+	public DiceServiceImpl(DiceDaoImpl diceDaoImpl) {
+		dao = diceDaoImpl;
 		HibernateUtil.getSessionFactory().openSession();
 	}
-	private DiceDao dao = new DiceDaoImpl();
+	public DiceServiceImpl() {
+		dao = new DiceDaoImpl();
+		HibernateUtil.getSessionFactory().openSession();
+	}
 
 	@Override
 	public DiceBean processDiceSimulation(DiceForm form) {
 		DiceSimulaltionService diceSimService = new DiceSimulationServiceImpl();
 		DiceSumCombinationService dicesumCombService = new DiceSumCombinationServiceImpl();
-//		DiceSumCombinationDao daoCombiSum = new DiceSumCombinationDaoImpl();
 		DiceBean bean = new DiceBean();;
 		// TODO Auto-generated method stub
 		HibernateUtil.openSessionFactory();
-		List<Dice> diceList = dao.retrieveList(SearchContainerUtil.addTwoSearchCriteria("diceCount","",form.getDiceCount(), "sideCount", "",form.getSize()));
-		Dice dice = new Dice();
-		if (diceList.size()>0) {
-			dice = diceList.get(0);
-		}
-		
-
-		dice.setDiceCount(form.getDiceCount());
-		dice.setSideCount(form.getSize());
-		dice.setTotalRollCount(dice.getTotalRollCount()+form.getRollCount());
-		dice = dao.saveObjectwithReturn(dice);
+		Dice dice = saveDice(form);
 
 		
 		DiceSimulation diceSimulation = new DiceSimulation();
@@ -85,13 +78,32 @@ public class DiceServiceImpl implements DiceService {
 		return bean;
 	}
 
+
+	public Dice saveDice(DiceForm form) {
+		Dice dice = new Dice();
+		if (form.getDiceCount() > 0) {
+			List<Dice> diceList = dao.retrieveList(SearchContainerUtil.addTwoSearchCriteria("diceCount", "",
+					form.getDiceCount(), "sideCount", "", form.getSize()));
+
+			if (diceList.size() > 0) {
+				dice = diceList.get(0);
+			}
+			dice.setDiceCount(form.getDiceCount());
+			dice.setSideCount(form.getSize());
+			dice.setTotalRollCount(dice.getTotalRollCount() + form.getRollCount());
+			dice = dao.saveObjectwithReturn(dice);
+		}
+		return dice;
+	}
+
+	
 	@Override
 	public DiceGameBean retrieveDiceSimulation(DiceForm form) {
 		// TODO Auto-generated method stub
 		DiceGameBean diceGameBean = new DiceGameBean();
 
 		HibernateUtil.openSessionFactory();
-		List<Dice> diceList = dao.retrieveList(new SearchContainerHelper());
+		List<Dice> diceList = retreiveDiceList();
 		
 		List<DiceSimulationBean> diceSimulationBeanList = new ArrayList<DiceSimulationBean>();
 		for (Dice dice:diceList) {
@@ -125,6 +137,11 @@ public class DiceServiceImpl implements DiceService {
 		diceGameBean.setDiceSimulationBeanList(diceSimulationBeanList);
 		return diceGameBean;
 	}
+	public List<Dice> retreiveDiceList() {
+		SearchContainerHelper container = new SearchContainerHelper();
+		return dao.retrieveList(container);
+	}
+	
 
 	private void processDiceSumCobinationBean(Dice dice, List<DiceSumCombinationBean> diceSumCombinationBeanList,
 			DiceGameSmulation diceGameSmulation) {

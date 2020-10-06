@@ -8,5 +8,4 @@ public interface DiceService {
 	
 	DiceBean processDiceSimulation(DiceForm form);
 	DiceGameBean retrieveDiceSimulation(DiceForm form);
-	
 }
