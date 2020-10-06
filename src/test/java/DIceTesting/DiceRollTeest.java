@@ -191,7 +191,7 @@ public class DiceRollTeest {
 		assertEquals(value, rollCount);
 	}
 
-	// @Test
+	 @Test
 	public void retrieveDiceGameSimulationResultsTest() {
 
 		DiceServiceImpl mockService = mock(DiceServiceImpl.class);
@@ -252,7 +252,7 @@ public class DiceRollTeest {
 		// use mock in test....
 	}
 
-//	@Test
+	@Test
 	public void saveDiceTest() {
 		Dice Dice = diceService.saveDice(form);
 		assertEquals(7, Dice.getDiceCount());
@@ -270,7 +270,7 @@ public class DiceRollTeest {
 		assertEquals(7, listDice.get(0).getDiceCount());
 	}
 
-//	@Test
+	@Test
 	public void retrieveDiceGameSimulationResultsDao1Test() {
 
 		DiceGameBean diceGameBean = diceService.retrieveDiceSimulation(form);
