@@ -1,7 +1,5 @@
 package com.techmahindra.avaloq.service.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -26,6 +24,7 @@ import com.techmahindra.avaloq.service.DiceService;
 import com.techmahindra.avaloq.service.DiceSimulaltionService;
 import com.techmahindra.avaloq.service.DiceSumCombinationService;
 import com.techmahindra.avaloq.util.HibernateUtil;
+import com.techmahindra.avaloq.util.ParserUtil;
 import com.techmahindra.avaloq.util.SearchContainerUtil;
 
 @Service 
@@ -114,19 +113,8 @@ public class DiceServiceImpl implements DiceService {
 
 			}
 
-			for(Entry<Integer, Integer> mapValue: diceGameSmulation.getSimulationMap().entrySet()) {
-				DiceSumCombinationBean diceSumCombinationBean = new DiceSumCombinationBean();
-				diceSumCombinationBean.setCombinationSum(mapValue.getKey());
-				Integer value = mapValue.getValue();
-				diceSumCombinationBean.setRepeatCount(value);
-				Double  repeatPercentage = new Double(value)/new Double(dice.getTotalRollCount());
-				repeatPercentage = repeatPercentage * 100.0;
-				BigDecimal bd = new BigDecimal(repeatPercentage).setScale(2, RoundingMode.HALF_UP);
-				repeatPercentage = bd.doubleValue();
-				
-				diceSumCombinationBean.setRepeatPercentage(repeatPercentage);
-				diceSumCombinationBeanList.add(diceSumCombinationBean);
-			}
+			processDiceSumCobinationBean(dice, diceSumCombinationBeanList, diceGameSmulation);
+			
 			diceSimulationBean.setDiceSumCombinationBeanList(diceSumCombinationBeanList);
 			diceSimulationBean.setSimulationCount(simulationCount);
 			diceSimulationBean.setTotalRollCount(dice.getTotalRollCount());
@@ -136,6 +124,18 @@ public class DiceServiceImpl implements DiceService {
 		HibernateUtil.closeSessionFactory();
 		diceGameBean.setDiceSimulationBeanList(diceSimulationBeanList);
 		return diceGameBean;
+	}
+
+	private void processDiceSumCobinationBean(Dice dice, List<DiceSumCombinationBean> diceSumCombinationBeanList,
+			DiceGameSmulation diceGameSmulation) {
+		for(Entry<Integer, Integer> mapValue: diceGameSmulation.getSimulationMap().entrySet()) {
+			DiceSumCombinationBean diceSumCombinationBean = new DiceSumCombinationBean();
+			diceSumCombinationBean.setCombinationSum(mapValue.getKey());
+			Integer value = mapValue.getValue();
+			diceSumCombinationBean.setRepeatCount(value);
+			diceSumCombinationBean.setRepeatPercentage(ParserUtil.convertToPercentage(new Double(value)/new Double(dice.getTotalRollCount())));
+			diceSumCombinationBeanList.add(diceSumCombinationBean);
+		}
 	}
 
 }
