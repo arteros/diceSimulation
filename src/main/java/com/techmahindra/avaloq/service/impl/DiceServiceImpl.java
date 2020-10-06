@@ -46,6 +46,7 @@ public class DiceServiceImpl implements DiceService {
 		DiceBean bean = new DiceBean();;
 		// TODO Auto-generated method stub
 		HibernateUtil.openSessionFactory();
+		
 		Dice dice = saveDice(form);
 
 		
@@ -54,6 +55,22 @@ public class DiceServiceImpl implements DiceService {
 		diceSimulation.setDice(dice);
 		diceSimulation = diceSimService.saveDiceSimulation(diceSimulation);
 		
+		List<DiceValueBean> diceSimulationList = generateDiceSimulation(form);
+
+		for (DiceValueBean diceValueBean: diceSimulationList) {
+
+			DiceSumCombination diceSumCombination = new DiceSumCombination();
+			diceSumCombination.setRepeatCount(diceValueBean.getRepeatCount());
+			diceSumCombination.setCombinationSum(diceValueBean.getSumValue());
+			diceSumCombination.setDiceSimulatio(diceSimulation);
+			dicesumCombService.saveDiceSumCombinationDao(diceSumCombination);
+		}
+
+		HibernateUtil.closeSessionFactory();
+		bean.setDiceSimulationList(diceSimulationList);
+		return bean;
+	}
+	public List<DiceValueBean> generateDiceSimulation(DiceForm form) {
 		List<DiceValueBean> diceSimulationList = new ArrayList<DiceValueBean>();
 		DiceGameSmulation diceGameSmulation = new DiceGameSmulation();
 		for (int ctr = 1;ctr<=form.getRollCount();ctr++) {
@@ -65,17 +82,9 @@ public class DiceServiceImpl implements DiceService {
 			keyValueBean.setSumValue(mapValue.getKey());
 			keyValueBean.setRepeatCount(mapValue.getValue());
 			
-			DiceSumCombination diceSumCombination = new DiceSumCombination();
-			diceSumCombination.setRepeatCount(mapValue.getValue());
-			diceSumCombination.setCombinationSum(mapValue.getKey());
-			diceSumCombination.setDiceSimulatio(diceSimulation);
-			dicesumCombService.saveDiceSumCombinationDao(diceSumCombination);
 			diceSimulationList.add(keyValueBean);
 		}
-
-		HibernateUtil.closeSessionFactory();
-		bean.setDiceSimulationList(diceSimulationList);
-		return bean;
+		return diceSimulationList;
 	}
 
 

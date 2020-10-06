@@ -15,9 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Spy;
 
-import com.techmahindra.avaloq.dao.DiceDao;
 import com.techmahindra.avaloq.dao.impl.DiceDaoImpl;
-import com.techmahindra.avaloq.model.beans.DiceBean;
 import com.techmahindra.avaloq.model.beans.DiceGameBean;
 import com.techmahindra.avaloq.model.beans.DiceSimulationBean;
 import com.techmahindra.avaloq.model.beans.DiceSumCombinationBean;
@@ -30,12 +28,7 @@ import com.techmahindra.avaloq.model.entity.DiceEntity;
 import com.techmahindra.avaloq.model.entity.DiceGame;
 import com.techmahindra.avaloq.model.entity.DiceGameSmulation;
 import com.techmahindra.avaloq.model.forms.DiceForm;
-import com.techmahindra.avaloq.service.DiceService;
-import com.techmahindra.avaloq.service.DiceSimulaltionService;
-import com.techmahindra.avaloq.service.DiceSumCombinationService;
 import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
-import com.techmahindra.avaloq.service.impl.DiceSimulationServiceImpl;
-import com.techmahindra.avaloq.service.impl.DiceSumCombinationServiceImpl;
 
 public class DiceRollTeest {
 	@Spy
@@ -106,7 +99,7 @@ public class DiceRollTeest {
 		when(diceDao.retrieveList(container)).thenReturn(Arrays.asList(dice, dice2));
 		when(diceService.retreiveDiceList()).thenReturn(Arrays.asList(dice, dice2));
 		when(diceService.saveDice(form)).thenReturn(dice);
-//		when(diceService.saveDice(form)).thenReturn(dice);
+		// when(diceService.saveDice(form)).thenReturn(dice);
 
 	}
 
@@ -147,42 +140,22 @@ public class DiceRollTeest {
 		assertEquals(value, rollCount);
 	}
 
-	// @Test
+	@Test
 	public void diceGameSimulationServiceTest() {
-		DiceService service = new DiceServiceImpl();
 
-		DiceDao dao = mock(DiceDaoImpl.class);
-		DiceSimulaltionService service1 = mock(DiceSimulationServiceImpl.class);
-		DiceSumCombinationService service2 = mock(DiceSumCombinationServiceImpl.class);
-
-		int sideCount = 6;
-		int diceCount = 3;
+		int sideCount = 8;
+		int diceCount = 7;
 		int rollCount = 10;
 		DiceForm form = new DiceForm();
 		form.setDiceCount(diceCount);
 		form.setRollCount(rollCount);
 		form.setSize(sideCount);
 
-		Dice dice = new Dice();
-		dice.setDiceCount(diceCount);
-		dice.setSideCount(sideCount);
-		dice.setTotalRollCount(100);
 
-		when(dao.saveObjectwithReturn(dice)).thenReturn(dice);
-
-		DiceSimulation diceSimulation = new DiceSimulation();
-		diceSimulation.setRollCount(rollCount);
-		when(service1.saveDiceSimulation(diceSimulation)).thenReturn(diceSimulation);
-
-		DiceSumCombination diceSumCombination = new DiceSumCombination();
-		diceSumCombination.setCombinationSum(10);
-		diceSumCombination.setRepeatCount(2);
-		when(service2.saveDiceSumCombinationDao(diceSumCombination)).thenReturn(diceSumCombination);
-
-		DiceBean bean = service.processDiceSimulation(form);
+		List<DiceValueBean> beanList = diceService.generateDiceSimulation(form);
 
 		int value = 0;
-		for (DiceValueBean valueBean : bean.getDiceSimulationList()) {
+		for (DiceValueBean valueBean : beanList) {
 			System.out.println(valueBean.getSumValue() + ":" + valueBean.getRepeatCount());
 			value = value + +valueBean.getRepeatCount();
 		}
@@ -191,7 +164,7 @@ public class DiceRollTeest {
 		assertEquals(value, rollCount);
 	}
 
-	 @Test
+	@Test
 	public void retrieveDiceGameSimulationResultsTest() {
 
 		DiceServiceImpl mockService = mock(DiceServiceImpl.class);
@@ -257,6 +230,7 @@ public class DiceRollTeest {
 		Dice Dice = diceService.saveDice(form);
 		assertEquals(7, Dice.getDiceCount());
 	}
+
 	@Test
 	public void retrieveAllDaoDiceTest() {
 		List<Dice> listDice = diceDao.retrieveList(container);
