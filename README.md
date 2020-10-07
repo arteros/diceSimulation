@@ -14,7 +14,8 @@ Technologies Used
 1. Maven
 2. Mysql
 3. Hibernate
-4. Log44j
+4. Log4j
 5. Sprng-boot
 6. Junit
 7. Mokito
+8. Gson
