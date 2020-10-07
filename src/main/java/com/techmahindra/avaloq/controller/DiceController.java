@@ -1,5 +1,8 @@
 package com.techmahindra.avaloq.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.techmahindra.avaloq.model.beans.DiceBean;
 import com.techmahindra.avaloq.model.beans.DiceGameBean;
+import com.techmahindra.avaloq.model.entity.ErrorMessage;
+import com.techmahindra.avaloq.model.enums.ErrorEnum;
 import com.techmahindra.avaloq.model.forms.DiceForm;
 import com.techmahindra.avaloq.service.DiceService;
 import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
@@ -23,18 +28,18 @@ public class DiceController {
 	public ResponseEntity<Object> generateDiceRollSimulations(int diceCount, int sideCount, int rollCount) {
 		System.out.println("hello world welcome:");
 
-		DiceForm form = new DiceForm();
-		form.setDiceCount(diceCount);
-		form.setRollCount(rollCount);
-		String response = validateQueryParameter(diceCount, sideCount, rollCount);
+		String response = "";
+		DiceBean diceBean = validateQueryParameter(diceCount, sideCount, rollCount);
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		if (response.equals("")) {
+		if (diceBean.getErrorMessageList().size()==0) {
+			DiceForm form = new DiceForm();
+			form.setDiceCount(diceCount);
+			form.setRollCount(rollCount);
 			form.setSize(sideCount);
 			DiceBean bean = service.processDiceSimulation(form);
 			response = gson.toJson(bean);
-			System.out.print(response);
 		} else {
-			response = gson.toJson(response);
+			response = gson.toJson(diceBean);
 		}
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
@@ -49,16 +54,30 @@ public class DiceController {
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 	}
 
-	private String validateQueryParameter(int diceCount, int sideCount, int rollCount) {
-		String resposnse = "";
+	private DiceBean validateQueryParameter(int diceCount, int sideCount, int rollCount) {
+		DiceBean diceBean = new DiceBean();
+		List<ErrorMessage> errorMessageList = new ArrayList<ErrorMessage>();
 		if (diceCount < 1) {
-			resposnse = "Dice Count should be greater than 0";
-		} else if (rollCount < 1) {
-			resposnse = "Roll Count should be greater than 0";
-		} else if (sideCount < 4) {
-			resposnse = "Sides of Dice should be greater than 3";
+			ErrorMessage errorMessage = new ErrorMessage();
+			errorMessage.setErrorCode(ErrorEnum.DICE_COUNT.getCode());
+			errorMessage.setErrorMessages(ErrorEnum.DICE_COUNT.getErrorMessage());
+			errorMessageList.add(errorMessage);
+		} 
+		if (rollCount < 1) {
+			ErrorMessage errorMessage = new ErrorMessage();
+			errorMessage.setErrorCode(ErrorEnum.ROLL_COUNT.getCode());
+			errorMessage.setErrorMessages(ErrorEnum.ROLL_COUNT.getErrorMessage());
+			errorMessageList.add(errorMessage);
+		} 
+		if (sideCount < 4) {
+			ErrorMessage errorMessage = new ErrorMessage();
+			errorMessage.setErrorCode(ErrorEnum.SIDE_COUNT.getCode());
+			errorMessage.setErrorMessages(ErrorEnum.SIDE_COUNT.getErrorMessage());
+			errorMessageList.add(errorMessage);
 		}
-		return resposnse;
+
+		diceBean.setErrorMessageList(errorMessageList);
+		return diceBean;
 	}
 
 }

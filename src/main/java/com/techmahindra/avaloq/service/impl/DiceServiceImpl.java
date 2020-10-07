@@ -29,13 +29,8 @@ import com.techmahindra.avaloq.util.SearchContainerUtil;
 
 @Service 
 public class DiceServiceImpl implements DiceService {
-	private DiceDao dao;
-	public DiceServiceImpl(DiceDaoImpl diceDaoImpl) {
-		dao = diceDaoImpl;
-		HibernateUtil.getSessionFactory().openSession();
-	}
+	private DiceDao dao= new DiceDaoImpl();
 	public DiceServiceImpl() {
-		dao = new DiceDaoImpl();
 		HibernateUtil.getSessionFactory().openSession();
 	}
 
