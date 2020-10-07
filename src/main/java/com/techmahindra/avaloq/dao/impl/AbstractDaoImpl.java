@@ -70,7 +70,6 @@ public abstract class AbstractDaoImpl<E> {
         	sessionObj.beginTransaction() ;
         }
 		Serializable value = sessionObj.save(object);
-		System.out.println("whahahah:"+value);
 		sessionObj.getTransaction().commit();
 		return ParserUtil.convertStringToLong(value.toString());
 	}

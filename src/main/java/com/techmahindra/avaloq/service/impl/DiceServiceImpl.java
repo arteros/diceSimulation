@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import com.techmahindra.avaloq.controller.DiceController;
 import com.techmahindra.avaloq.dao.DiceDao;
 import com.techmahindra.avaloq.dao.impl.DiceDaoImpl;
 import com.techmahindra.avaloq.model.beans.DiceBean;
@@ -29,6 +32,7 @@ import com.techmahindra.avaloq.util.SearchContainerUtil;
 
 @Service 
 public class DiceServiceImpl implements DiceService {
+    private static final Logger LOGGER = LogManager.getLogger(DiceServiceImpl.class);
 	private DiceDao dao= new DiceDaoImpl();
 	public DiceServiceImpl() {
 		HibernateUtil.getSessionFactory().openSession();
@@ -36,6 +40,7 @@ public class DiceServiceImpl implements DiceService {
 
 	@Override
 	public DiceBean processDiceSimulation(DiceForm form) {
+		LOGGER.info("in processDiceSimulation");
 		DiceSimulaltionService diceSimService = new DiceSimulationServiceImpl();
 		DiceSumCombinationService dicesumCombService = new DiceSumCombinationServiceImpl();
 		DiceBean bean = new DiceBean();;
@@ -103,6 +108,7 @@ public class DiceServiceImpl implements DiceService {
 	
 	@Override
 	public DiceGameBean retrieveDiceSimulation(DiceForm form) {
+		LOGGER.info("in retrieveDiceSimulation");
 		// TODO Auto-generated method stub
 		DiceGameBean diceGameBean = new DiceGameBean();
 

@@ -30,7 +30,7 @@ import com.techmahindra.avaloq.model.entity.DiceGameSmulation;
 import com.techmahindra.avaloq.model.forms.DiceForm;
 import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
 
-public class DiceRollTeest {
+public class DiceRollTest {
 	@Spy
 	private List<Dice> diceList = new ArrayList<Dice>();
 	private static Dice dice;
@@ -132,7 +132,6 @@ public class DiceRollTeest {
 			diceGameSmulation.setValue(diceGame.getDiceSum());
 		}
 		for (Entry<Integer, Integer> mapValue : diceGameSmulation.getSimulationMap().entrySet()) {
-			// System.out.println(mapValue.getKey()+":"+mapValue.getValue());
 			value = value + +mapValue.getValue();
 		}
 
@@ -156,7 +155,6 @@ public class DiceRollTeest {
 
 		int value = 0;
 		for (DiceValueBean valueBean : beanList) {
-			System.out.println(valueBean.getSumValue() + ":" + valueBean.getRepeatCount());
 			value = value + +valueBean.getRepeatCount();
 		}
 
@@ -199,24 +197,14 @@ public class DiceRollTeest {
 		beans.setDiceSimulationBeanList(diceSimulationBeanList);
 
 		when(mockService.retrieveDiceSimulation(form)).thenReturn(beans);
-		System.out.println(
-				"##############:" + mockService.retrieveDiceSimulation(form).getDiceSimulationBeanList().size());
 
 		DiceGameBean dgbean = mockService.retrieveDiceSimulation(form);
 
 		for (DiceSimulationBean bean : dgbean.getDiceSimulationBeanList()) {
 
-			System.out.println("##############################################");
-			System.out.println("bean.getDiceValue():" + bean.getDiceValue());
-			System.out.println("bean.getSideValue():" + bean.getSideValue());
-			System.out.println("bean.getSimulationCount():" + bean.getSimulationCount());
-			System.out.println("bean.getTotalRollCount():" + bean.getTotalRollCount());
 			int sum = 0;
 			for (DiceSumCombinationBean dscbean : bean.getDiceSumCombinationBeanList()) {
 
-				System.out.println("dscbean.getCombinationSum():" + dscbean.getCombinationSum());
-				System.out.println("dscbean.getRepeatCount():" + dscbean.getRepeatCount());
-				System.out.println("dscbean.getRepeatPercentage():" + dscbean.getRepeatPercentage());
 				sum = dscbean.getRepeatCount() + sum;
 			}
 			assertEquals(bean.getTotalRollCount(), sum);
@@ -248,7 +236,6 @@ public class DiceRollTeest {
 	public void retrieveDiceGameSimulationResultsDao1Test() {
 
 		DiceGameBean diceGameBean = diceService.retrieveDiceSimulation(form);
-		System.out.println(diceGameBean.getDiceSimulationBeanList().size());
 		assertEquals(7, diceGameBean.getDiceSimulationBeanList().get(0).getDiceValue());
 
 		for (DiceSimulationBean bean : diceGameBean.getDiceSimulationBeanList()) {

@@ -2,7 +2,8 @@ package com.techmahindra.avaloq.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,11 +23,14 @@ import com.techmahindra.avaloq.service.impl.DiceServiceImpl;
 
 @Controller
 public class DiceController {
+
+    private static final Logger LOGGER = LogManager.getLogger(DiceController.class);
+
 	DiceService service = new DiceServiceImpl();
 
 	@RequestMapping(value = "/generateDiceRollSimulations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> generateDiceRollSimulations(int diceCount, int sideCount, int rollCount) {
-		System.out.println("hello world welcome:");
+        LOGGER.info("in generateDiceRollSimulations");
 
 		String response = "";
 		DiceBean diceBean = validateQueryParameter(diceCount, sideCount, rollCount);
@@ -46,7 +50,7 @@ public class DiceController {
 
 	@RequestMapping(value = "/retrieveDiceRollSimulations", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> retrieveDiceRollSimulations() {
-		System.out.println("hello world welcome:");
+		LOGGER.info("in retrieveDiceRollSimulations");
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		DiceGameBean bean = service.retrieveDiceSimulation(new DiceForm());

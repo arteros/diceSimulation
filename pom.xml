@@ -36,10 +36,9 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- JSTL -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
 		<!-- Need this to compile JSP -->
