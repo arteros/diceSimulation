@@ -8,3 +8,13 @@ generateDiceRollSimulations
 
 retrieveDiceRollSimulations
 - It displays the result of simulations of the dice
+
+
+Technologies Used
+1. Maven
+2. Mysql
+3. Hibernate
+4. Log44j
+5. Sprng-boot
+6. Junit
+7. Mokito
